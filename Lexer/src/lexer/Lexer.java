@@ -82,13 +82,17 @@ public class Lexer {
     put("Unrecognized", "Unrecognized");
     }};
     
-  
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-    // TODO code application logic here
-    System.out.println("Hello Bn Osman here starting Automata Project right now ");
+    private String input ;
+    private int line ;
+    private int column ;
+    private int position ;
+    
+    public Lexer(String input ){
+        this.input = input ;
+        this.column = 0;
+        this.line = 0;
+        this.position = 0;
+        
     }
     
 }
