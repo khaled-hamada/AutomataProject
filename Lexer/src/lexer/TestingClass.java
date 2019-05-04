@@ -9,13 +9,51 @@ package lexer;
  *
  * @author khaled osman
  */
+import java.util.*;
 public class TestingClass {
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
     // TODO code application logic here
-    System.out.println("Hello Bn Osman here starting Automata Project right now ");
+    
+    Lexer l  = new Lexer("// my name is khaled hamamda \n \t ({[]})");
+    l.tokenize();
+    l.printTokens();
+    String ttt = "\t\t";
+    char c;
+    //System.out.println("length of original string is %d" + ttt.length());
+    String newt ="";
+    int pos =0 ;
+    for(int i =0; i<ttt.length() ; i++){
+       c = ttt.charAt(i) ; 
+       if(c == ' ' || c == '\t'){
+           pos +=1 ;
+           continue;
+       }
+       else {
+           //pos += 1;
+           newt += c;
+       }
+    }
+   // System.out.println("length of new string is %d"+ newt.length() +"and with pos is %d"+
+   //        ( ttt.length()-pos) );
+   // System.out.println(ttt + "\n"+ newt);
+  // System.out.println("//");
+    //System.out.println('(' == ')');
+    
+    
+    
+//     ArrayList<Character> delimiter =  new ArrayList<Character>()
+//    {{
+//        add('('); add(')');add('[');add(']');add('{');add('}');add(',');
+//        add(':');add(';');
+//    }};
+//     c = '(';
+//    System.out.println(delimiter.contains(c));
+//    String te = 'c'+"b";
+//    System.out.println(te);
+    
     }
     
 }

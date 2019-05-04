@@ -20,8 +20,20 @@ public class Token {
         this.linen = linen ;
         this.columnn = columnn ;
     }
+    public String getType(){
+        return this.type;
+    }
+    public String getValue(){
+        return this.value;
+    }
+    public int getLine(){
+        return this.linen;
+    }
+    public int getcolumn(){
+        return this.columnn;
+    }
     @Override
     public String toString(){
-       return "<" + this.type + ", " + this.value + ", " + this.linen + ":" + this.columnn + ">";
+       return "<" + this.type + "\t\t\t\t" + this.value + "\t\t\t" + this.linen + "\t" + this.columnn + "\t>";
     }
 }

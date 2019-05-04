@@ -7,3 +7,8 @@
 4- gfg c program 
 
 5- all together 
+
+
+==================================
+1 String class , character class 
+3- write out map 
