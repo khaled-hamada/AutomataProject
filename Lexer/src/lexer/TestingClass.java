@@ -17,7 +17,8 @@ public class TestingClass {
     public static void main(String[] args) {
     // TODO code application logic here
     
-    Lexer l  = new Lexer("// my name is khaled hamamda \n \t ({[]})");
+    Lexer l  = new Lexer("// my name is khaled hamamda \n \t ({[]}) -> - + * / %-- ++  "
+            );
     l.tokenize();
     l.printTokens();
     String ttt = "\t\t";

@@ -106,7 +106,8 @@ public class Lexer {
    private final ArrayList<Character> operatorSC =  new ArrayList<Character>()
     {{
         add('.'); add('=');add('/');add('%');add('-');add('+');add('*');
-        add('>');add('<');add('!');add('$');add('^');add('~');
+        add('>');add('<');add('!');add('$');add('^');add('~');add('&');add('|');
+        
     }};
    //recoognize double chars operators 
    private final ArrayList<String> operatorDC =  new ArrayList<String>()
@@ -171,20 +172,43 @@ public class Lexer {
                 removeWhiteSpaces();
             
             //remove comments 
-            else if(c == '/'){
-                if(this.input.charAt(this.position + 1) == '/'){
-                    this.position += 1; 
-                    this.column +=1;
+            if(c == '/'){
+                if((this.position + 1) <this.input.length() &&
+                        this.input.charAt(this.position + 1) == '/'){
+                    this.position += 2; 
+                    this.column +=2;
                     removeComments();
                 }
                 // make remove comments one ant two for /* */ 
             }
             
             //recongnize delimiters 
-            else if(this.delimiter.contains(c)){
+            if(this.delimiter.contains(c)){
                // System.out.println("inside paren test");
                return  reconizeDelimiter();
             }
+            // check for operators 
+            // 1- check for double operators 
+            if (this.position +1 < this.input.length()){
+                char cLookA = this.input.charAt(this.position+1);
+                if(this.operatorDC.contains(c+""+cLookA)){
+                    this.position += 2;
+                    this.column += 2;
+                    return new Token(this.tokenType.get(c+""+cLookA),c+""+cLookA,this.line,
+                                     this.column -2);
+                
+               }
+              
+            }
+            // 2- check for single operator 
+            if(this.operatorSC.contains(c)){
+                   this.position += 1;
+                   this.column += 1;
+                   return new Token(this.tokenType.get(c+""),c+"",this.line,
+                                     this.column -1);
+              }
+              
+            
             
 //            else{
 //                System.out.println("Hey am here get a token ");
