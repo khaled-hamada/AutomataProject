@@ -1,7 +1,28 @@
 <newline>            = \n | \r\n
 <comment>            = // <character>* <newline>
 <delimiter>          = { | [ | ( | } | ] | ) | : | ,|;
+<operator>           = + | - | * | / | = | > | < | ! | & | % | ~ | $ | ^
+<operator_extended>  = <operator> | <operator> = | && | ||
 
+<letter>             = [a-zA-Z]
 
-sami eiad 
-01012777446 
+<identifier>         = (<letter> | _) (<letter> | <digit> | <operator> | _)*
+	
+
+    
+## Keywords
+
+<else>               = else
+<false>              = false
+<func>               = func
+<for>                = for
+<if>                 = if
+<null>               = null
+<return>             = return
+<true>               = true
+<while>              = while
+<int>		     = int
+<char>		     = char
+<double>	     = double 
+<float>		     = float 
+<String>	     = String 

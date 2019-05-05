@@ -11,6 +11,7 @@ import java.util.*;
  * @author khaled osman
  */
 public class Lexer {
+    
     /*
     * dectionary containing tokens type 
     */
@@ -18,18 +19,10 @@ public class Lexer {
     
     // Keywords
     
-    put("double", "keyword"); 
-    put("else", "keyword");
-    put("false", "keyword");
-    put("func", "keyword");
-    put("for", "keyword");
-    put("float", "keyword");
-    put("if", "keyword");
-    put("int", "keyword");
-    put("null", "keyword");
-    put("return", "keyword");
-    put("true", "keyword");
-    put("String", "keyword");
+    put("double", "keyword");  put("else", "keyword");put("false", "keyword");
+    put("func", "keyword");put("for", "keyword");put("float", "keyword");
+    put("if", "keyword");put("int", "keyword");  put("null", "keyword");  put("return", "keyword");
+    put("true", "keyword");  put("String", "keyword");put("char","keyword");
     
     // Dispatch operators
     put(".", "Dispatch operator");
@@ -116,7 +109,12 @@ public class Lexer {
         add("==");add(">=");add("<=");add("!=");add("&&");add("||");add("~=");add("$=");
         add("^=");
     }};
-    
+    //  recognize language keywords 
+    private final ArrayList<String> keyword =  new ArrayList<String>()
+    {{
+        add("double"); add("else");add("false");add("func");add("for");add("float");add("if");
+        add("int");add("elseif");add("null");add("return");add("true");add("String");add("char");
+    }};
    
    
     // ------------------------------------------------------------
@@ -185,7 +183,7 @@ public class Lexer {
             //recongnize delimiters 
             if(this.delimiter.contains(c)){
                // System.out.println("inside paren test");
-               return  reconizeDelimiter();
+               return  recognizeDelimiter();
             }
             // check for operators 
             // 1- check for double operators 
@@ -200,14 +198,19 @@ public class Lexer {
                }
               
             }
-            // 2- check for single operator 
+            // 2- check for single operator  define recognize number especailly negative 
+            // and positive preceded by a + sign before it 
+            //check prevsious token if its = then this in a number not an operator 
             if(this.operatorSC.contains(c)){
                    this.position += 1;
                    this.column += 1;
                    return new Token(this.tokenType.get(c+""),c+"",this.line,
                                      this.column -1);
               }
-              
+             // recognize iden and keywords 
+            if(isAlphabet(c) || c =='_')
+                return recognizeKW_ID();
+             
             
             
 //            else{
@@ -269,7 +272,7 @@ public class Lexer {
     
     //------------------------------------------------------------------
     // ----------------------------------------------------------------------
-    private Token  reconizeDelimiter(){
+    private Token  recognizeDelimiter(){
         char c = this.input.charAt(this.position);
         //update lexer var 
         this.position += 1;
@@ -319,9 +322,28 @@ public class Lexer {
            
     }
     
-    
     // ----------------------------------------------------------------------
-    //----------------------------------------------------
+    //-----------------------------------------------------------------------
+    
+    /**
+     * recognize keywords and identifiers 
+     */
+    private Token recognizeKW_ID(){
+        
+        return new Token("","",0,0);
+    }
+    
+    //helper methods for recognize keyw and iden 
+    private boolean isDigit(char c){
+        return c >='0' && c<='9';
+    }
+    
+    private boolean isAlphabet(char c){
+        
+        return (c >='A' && c<='Z') || (c >='a' && c<='z');
+    }
+    // ----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
     public void printTokens(){
         if(this.allTokens != null){
             if(this.allTokens.size() >0 ){

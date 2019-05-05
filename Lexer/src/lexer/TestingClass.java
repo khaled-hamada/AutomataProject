@@ -37,6 +37,7 @@ public class TestingClass {
            newt += c;
        }
     }
+    int max  =+      50 ;
    // System.out.println("length of new string is %d"+ newt.length() +"and with pos is %d"+
    //        ( ttt.length()-pos) );
    // System.out.println(ttt + "\n"+ newt);
@@ -53,7 +54,7 @@ public class TestingClass {
 //     c = '(';
 //    System.out.println(delimiter.contains(c));
 //    String te = 'c'+"b";
-//    System.out.println(te);
+//    System.out.println(max);
     
     }
     
