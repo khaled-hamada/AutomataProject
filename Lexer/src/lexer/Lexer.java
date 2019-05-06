@@ -22,8 +22,8 @@ public class Lexer {
     put("double", "keyword");  put("else", "keyword");put("false", "keyword");
     put("func", "keyword");put("for", "keyword");put("float", "keyword");
     put("if", "keyword");put("int", "keyword");  put("null", "keyword");  put("return", "keyword");
-    put("true", "keyword");  put("String", "keyword");put("char","keyword");put("elseif","keyword");
-    
+    put("true", "keyword");  put("string", "keyword");put("char","keyword");put("elseif","keyword");
+    put("print","keyword"); put("printf","keyword");
     // Dispatch operators
     put(".", "Dispatch operator");
 
@@ -43,7 +43,8 @@ public class Lexer {
     put( "-", "Arithmetic operators- Minus");
     put( "+", "Arithmetic operators- Plus");
     put( "*", "Arithmetic operators- multiplication");
-
+    put("++","Prefix/postfix increment");
+    put("--","Prefix/postfix decrement");
     // Comparison operators
     put( "==", "Comparison operators - DoubleEqual");
     put( ">", "Comparison operators - Greater");
@@ -58,11 +59,11 @@ public class Lexer {
     put( "||", "Boolean operator - Or");
 
     // Identifier and Literals
-    put("Identifier", "identifier");
-    put("Integer", "integer");
-    put("Decimal", "decimal");
-    put("String", "string");
-    put("char","char");
+    put("Identifier", "var - Identifier");
+    put("Integer", "var - Integer");
+    put("Decimal", "var - Decimal");
+    put("String", "var - String");
+    put("Char","var - Char");
     // Delimiters
     put(":", "Delimiter - Colon");
     put( ",", "Delimiter - Comma");
@@ -113,7 +114,8 @@ public class Lexer {
     private final ArrayList<String> keyword =  new ArrayList<String>()
     {{
         add("double"); add("else");add("false");add("func");add("for");add("float");add("if");
-        add("int");add("elseif");add("null");add("return");add("true");add("String");add("char");
+        add("int");add("elseif");add("null");add("return");add("true");add("string");add("char");
+        add("print");add("printf");
     }};
    
    
@@ -164,7 +166,7 @@ public class Lexer {
         while(this.position < this.input.length()){
             // get next char in input 
             c = this.input.charAt(this.position);
-            //System.out.println("char c = "+c);
+           // System.out.println("char c = "+c);
             //check white spaces 
             if(Character.isWhitespace(c))
                 removeWhiteSpaces();
@@ -190,6 +192,7 @@ public class Lexer {
             if (this.position +1 < this.input.length()){
                 char cLookA = this.input.charAt(this.position+1);
                 if(this.operatorDC.contains(c+""+cLookA)){
+                  //  System.out.println("String double operator = "+(c+""+cLookA));
                     this.position += 2;
                     this.column += 2;
                     return new Token(this.tokenType.get(c+""+cLookA),c+""+cLookA,this.line,
@@ -208,16 +211,17 @@ public class Lexer {
                                      this.column -1);
               }
              // recognize identifiers  and keywords 
-            if(Character.isAlphabetic(c) || c =='_')
+            if(Character.isLetterOrDigit(c) || c =='_')
                 return recognizeKW_ID();
              
             // recognize string varialbes 
             if(c == '\"')
-                recognizeStringVar();
+                return recognizeStringVar();
             // recognize char var 
-            if(c == '\'')
-                recognizeCharVar();
-            
+            if(c == '\''){
+               // System.out.println("Stuck here ");
+                return recognizeCharVar();
+            }
             
 //            else{
 //                System.out.println("Hey am here get a token ");
@@ -286,7 +290,7 @@ public class Lexer {
         
         if(c == '[' || c== '{' || c == '('){
             this.paren.push(c);
-            return new Token(this.tokenType.get(c+""),c+"",this.line, this.column);
+            return new Token(this.tokenType.get(c+""),c+"",this.line, this.column-1);
         }
         else if(c == ']' || c== '}' || c == ')'){
             //check for parenthesis matching
@@ -294,37 +298,37 @@ public class Lexer {
                 switch (c) {
                     case '}':
                          if(this.paren.pop() == '{')
-                             return new Token(this.tokenType.get(c+""),c+"",this.line, this.column);
+                             return new Token(this.tokenType.get(c+""),c+"",this.line, this.column-1);
                          else 
                              break ;
                     case ']':
                         if(this.paren.pop() == '[')
-                             return new Token(this.tokenType.get(c+""),c+"",this.line, this.column);
+                             return new Token(this.tokenType.get(c+""),c+"",this.line, this.column-1);
                          else 
                              break ;
                     case ')':
                         if(this.paren.pop() == '(')
-                             return new Token(this.tokenType.get(c+""),c+"",this.line, this.column);
+                             return new Token(this.tokenType.get(c+""),c+"",this.line, this.column-1);
                          else 
                              break ;
 
                     default :
                 }
                 // unmatched prentheses 
-                return new Token(this.tokenType.get("Error"),c+" unmatched parenthesis at ",this.line, this.column);
+                return new Token(this.tokenType.get("Error"),c+" unmatched parenthesis at ",this.line, this.column-1);
             
             }
             else
                 // unmatched prentheses 
-                return new Token(this.tokenType.get("Error"),c+" unmatched parenthesis at ",this.line, this.column);
+                return new Token(this.tokenType.get("Error"),c+" unmatched parenthesis at ",this.line, this.column-1);
             
         }
         else if(c == ':' )
-            return new Token(this.tokenType.get(c+""),c+"",this.line, this.column);
+            return new Token(this.tokenType.get(c+""),c+"",this.line, this.column-1);
         else if(c == ',')
-            return new Token(this.tokenType.get(c+""),c+"",this.line, this.column);
+            return new Token(this.tokenType.get(c+""),c+"",this.line, this.column-1);
         else 
-            return new Token(this.tokenType.get(c+""),c+"",this.line, this.column);
+            return new Token(this.tokenType.get(c+""),c+"",this.line, this.column-1);
            
     }
     
@@ -336,6 +340,8 @@ public class Lexer {
      */
     private Token recognizeKW_ID(){
         String tokenVal = "";
+        int templ = this.line ;
+        int tempc = this.column ;
         while(this.position < this.input.length() ){
             char c = this.input.charAt(this.position);
             if((Character.isLetterOrDigit(c) ||c =='_' )){
@@ -348,9 +354,9 @@ public class Lexer {
         }
         //check for  keywords
         if(this.keyword.contains(tokenVal))
-            return new Token(this.tokenType.get(tokenVal),tokenVal,this.line,this.column);
+            return new Token(this.tokenType.get(tokenVal),tokenVal, templ,tempc);
         else
-            return new Token(this.tokenType.get("Identifier"),tokenVal,this.line,this.column);
+            return new Token(this.tokenType.get("Identifier"),tokenVal, templ,tempc);
     }
     
     
@@ -362,6 +368,8 @@ public class Lexer {
     private Token recognizeStringVar(){
         String tokenVal = "";
         char c =this.input.charAt(this.position) ;
+        // proceed position by one to skip first "   
+        this.position +=1 ;
         int templ = this.line ;
         int tempcol = this.column+1;
         while(this.position < this.input.length() && 
@@ -393,26 +401,27 @@ public class Lexer {
      */
     private Token recognizeCharVar(){
         
-        String tokenVal = "";
-        char c ;
-        int templ = this.line ;
-        int tempcol = this.column+1;
-        // check ascci chars 
-        if(this.position + 2 < this.input.length() && 
-               (c = this.input.charAt(this.position+1))!='\"' ){
-                tokenVal += c;
-                this.position +=1 ;
-                this.column += 1;
-                if(c == '\n'){
-                    this.line += 1;
-                    this.column = 0;
+         char c =this.input.charAt(this.position);
+         // check ascci chars 
+        if(this.position + 2 < this.input.length() ){
+                c = this.input.charAt(this.position +1);
+                if(c >= 0 && c <= 127){
+                   // System.out.println("char c inside = "+c);
+                    this.position +=1 ;
+                    this.column += 1;
+                    if(this.input.charAt(this.position + 1) == '\''){
+                        // skip second single quotation and return a new char token 
+                   //    System.out.println("char c inside = "+c); 
+                       this.position +=2 ;
+                       this.column += 2;
+                       return new Token(this.tokenType.get("Char"),c+"",this.line,this.column - 2);
+                    }
                 }
+                else
+                     return new Token(this.tokenType.get("Error"),c+"",this.line,this.column);
             }
-        // skip second " 
-        this.position += 1;
-        this.column +=1;
-        
-        return new Token(this.tokenType.get("String"),tokenVal,templ,tempcol);
+     
+        return new Token(this.tokenType.get("Error"),c+"",this.line,this.column);
     }
     
     
