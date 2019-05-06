@@ -22,7 +22,7 @@ public class Lexer {
     put("double", "keyword");  put("else", "keyword");put("false", "keyword");
     put("func", "keyword");put("for", "keyword");put("float", "keyword");
     put("if", "keyword");put("int", "keyword");  put("null", "keyword");  put("return", "keyword");
-    put("true", "keyword");  put("String", "keyword");put("char","keyword");
+    put("true", "keyword");  put("String", "keyword");put("char","keyword");put("elseif","keyword");
     
     // Dispatch operators
     put(".", "Dispatch operator");
@@ -62,7 +62,7 @@ public class Lexer {
     put("Integer", "integer");
     put("Decimal", "decimal");
     put("String", "string");
-
+    put("char","char");
     // Delimiters
     put(":", "Delimiter - Colon");
     put( ",", "Delimiter - Comma");
@@ -107,7 +107,7 @@ public class Lexer {
     {{
         add("<-"); add("/=");add("-=");add("%=");add("+=");add("->");add("*=");
         add("==");add(">=");add("<=");add("!=");add("&&");add("||");add("~=");add("$=");
-        add("^=");
+        add("^=");add("++");add("--");
     }};
     //  recognize language keywords 
     private final ArrayList<String> keyword =  new ArrayList<String>()
@@ -166,7 +166,7 @@ public class Lexer {
             c = this.input.charAt(this.position);
             //System.out.println("char c = "+c);
             //check white spaces 
-            if(c ==' ' || c == '\t' || c == '\n')
+            if(Character.isWhitespace(c))
                 removeWhiteSpaces();
             
             //remove comments 
@@ -207,10 +207,16 @@ public class Lexer {
                    return new Token(this.tokenType.get(c+""),c+"",this.line,
                                      this.column -1);
               }
-             // recognize iden and keywords 
-            if(isAlphabet(c) || c =='_')
+             // recognize identifiers  and keywords 
+            if(Character.isAlphabetic(c) || c =='_')
                 return recognizeKW_ID();
              
+            // recognize string varialbes 
+            if(c == '\"')
+                recognizeStringVar();
+            // recognize char var 
+            if(c == '\'')
+                recognizeCharVar();
             
             
 //            else{
@@ -329,19 +335,108 @@ public class Lexer {
      * recognize keywords and identifiers 
      */
     private Token recognizeKW_ID(){
-        
-        return new Token("","",0,0);
+        String tokenVal = "";
+        while(this.position < this.input.length() ){
+            char c = this.input.charAt(this.position);
+            if((Character.isLetterOrDigit(c) ||c =='_' )){
+                tokenVal += c;
+                this.position +=1 ;
+                this.column += 1;
+            }
+            else
+                break ;
+        }
+        //check for  keywords
+        if(this.keyword.contains(tokenVal))
+            return new Token(this.tokenType.get(tokenVal),tokenVal,this.line,this.column);
+        else
+            return new Token(this.tokenType.get("Identifier"),tokenVal,this.line,this.column);
     }
     
-    //helper methods for recognize keyw and iden 
-    private boolean isDigit(char c){
-        return c >='0' && c<='9';
+    
+    // ----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
+    /**
+     * 
+     */
+    private Token recognizeStringVar(){
+        String tokenVal = "";
+        char c =this.input.charAt(this.position) ;
+        int templ = this.line ;
+        int tempcol = this.column+1;
+        while(this.position < this.input.length() && 
+               (c = this.input.charAt(this.position))!='\"' ){
+                tokenVal += c;
+                this.position +=1 ;
+                this.column += 1;
+                if(c == '\n'){
+                    this.line += 1;
+                    this.column = 0;
+                }
+        }
+        if(c == '\"'){
+            // skip second " 
+            this.position += 1;
+            this.column +=1;
+
+            return new Token(this.tokenType.get("String"),tokenVal,templ,tempcol);
+        }
+        else 
+            return new Token(this.tokenType.get("Error"),tokenVal,templ,tempcol);
     }
     
-    private boolean isAlphabet(char c){
+    // ----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
+    
+    /**
+     * 
+     */
+    private Token recognizeCharVar(){
         
-        return (c >='A' && c<='Z') || (c >='a' && c<='z');
+        String tokenVal = "";
+        char c ;
+        int templ = this.line ;
+        int tempcol = this.column+1;
+        // check ascci chars 
+        if(this.position + 2 < this.input.length() && 
+               (c = this.input.charAt(this.position+1))!='\"' ){
+                tokenVal += c;
+                this.position +=1 ;
+                this.column += 1;
+                if(c == '\n'){
+                    this.line += 1;
+                    this.column = 0;
+                }
+            }
+        // skip second " 
+        this.position += 1;
+        this.column +=1;
+        
+        return new Token(this.tokenType.get("String"),tokenVal,templ,tempcol);
     }
+    
+    
+    // ----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
+    /**
+     * recognize all kinds of numbers including integers , floats, fractions , positive , negative ....
+     * using FSM 
+     */
+    private Token recognizeNumber(){
+        return new Token(" ","",0,0);
+    }
+    
+    // helper methods for recognize numbers 
+    private boolean isStartOfNumber(char c){
+        
+        return false ;
+    }
+    
+    
+    
+    
+    
+    
     // ----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     public void printTokens(){

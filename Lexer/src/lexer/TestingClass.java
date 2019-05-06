@@ -17,9 +17,9 @@ public class TestingClass {
     public static void main(String[] args) {
     // TODO code application logic here
     
-    Lexer l  = new Lexer("// my name is khaled hamamda \n \t ({[]}) -> - + * / %-- ++  "
-            );
-    l.tokenize();
+    Lexer l  = new Lexer("// my name is khaled hamamda \n \t ({[]}) -> - + * / %-- ++ max_8 int float "
+            + "double String else if elseif func fun_445  ");
+   // l.tokenize();
     l.printTokens();
     String ttt = "\t\t";
     char c;
@@ -37,7 +37,7 @@ public class TestingClass {
            newt += c;
        }
     }
-    int max  =+      50 ;
+   // int max  =+      50 ;
    // System.out.println("length of new string is %d"+ newt.length() +"and with pos is %d"+
    //        ( ttt.length()-pos) );
    // System.out.println(ttt + "\n"+ newt);
@@ -54,7 +54,9 @@ public class TestingClass {
 //     c = '(';
 //    System.out.println(delimiter.contains(c));
 //    String te = 'c'+"b";
-//    System.out.println(max);
+    int  max ='z';
+    String maxs = max+"";
+     System.out.println(maxs);
     
     }
     

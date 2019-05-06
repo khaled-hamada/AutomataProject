@@ -8,6 +8,12 @@
 
 <identifier>         = (<letter> | _) (<letter> | <digit> | <operator> | _)*
 	
+## Literals
+
+<escaped_character>  = \" | \\ | \/ | \b | \f | \n | \r | \t  
+<character>          = any ASCII character expect ", \ and the control characters | <escaped_character>  
+<characters>         = <character> <character>*  
+<string>             = "" | " <characters> "
 
     
 ## Keywords
