@@ -1,0 +1,13 @@
+func int main(int a, int b){
+if a > b
+	return a ;
+elseif a < b 
+	return b ;
+else 
+	return '0' ; 
+
+}
+
+func get_max(int a ,int b){
+ return (a>b ? a: b); 
+}

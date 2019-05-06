@@ -9,54 +9,51 @@ package lexer;
  *
  * @author khaled osman
  */
-import java.util.*;
+import java.io.*;
+import java.util.List;
 public class TestingClass {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
     // TODO code application logic here
     
-    Lexer l  = new Lexer("string statement = \"string\" print(\"khaled\") ");
-    l.tokenize();
-    l.printTokens();
-    String ttt = "\t\t";
-    char c;
-    //System.out.println("length of original string is %d" + ttt.length());
-    String newt ="";
-    int pos =0 ;
-    for(int i =0; i<ttt.length() ; i++){
-       c = ttt.charAt(i) ; 
-       if(c == ' ' || c == '\t'){
-           pos +=1 ;
-           continue;
-       }
-       else {
-           //pos += 1;
-           newt += c;
-       }
+    // read code file 
+    String code = "";
+    BufferedReader br = new BufferedReader(new FileReader("testSample1.txt"));
+    try {
+        StringBuilder sb = new StringBuilder();
+        String line = br.readLine();
+
+        while (line != null) {
+            sb.append(line);
+            sb.append("\n");
+            //sb.append(System.lineSeparator());
+            line = br.readLine();
+        }
+    
+        code = sb.toString();
+        
     }
-   // int max  =+      50 ;
-   // System.out.println("length of new string is %d"+ newt.length() +"and with pos is %d"+
-   //        ( ttt.length()-pos) );
-   // System.out.println(ttt + "\n"+ newt);
-  // System.out.println("//");
-    //System.out.println('(' == ')');
+     catch (Exception e) {
+            System.out.println(e);
+     }
     
+    finally {
+        br.close();
+    }
+   
     
-    
-//     ArrayList<Character> delimiter =  new ArrayList<Character>()
-//    {{
-//        add('('); add(')');add('[');add(']');add('{');add('}');add(',');
-//        add(':');add(';');
-//    }};
-//     c = '(';
-//    System.out.println(delimiter.contains(c));
-//    String te = 'c'+"b";
-    char  max ='z';
-    String maxs = max+"";
-     System.out.println(" \"khaled\" ");
-    
+    // convert code to tokens 
+    System.out.println("read code ");
+    Lexer l  = new Lexer(code);
+    List<Token> tokens = l.tokenize();
+    l.printTokens();
+    System.out.println("number of tokens = " +( tokens != null? tokens.size(): 0));
+//    char  max ='z';
+//    String maxs = max+"";
+//     System.out.println(" \"khaled\" ");
+//    
     }
     
 }

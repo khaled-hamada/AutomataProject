@@ -34,6 +34,7 @@ public class Token {
     }
     @Override
     public String toString(){
-       return "<" + this.type + "\t\t\t\t" + this.value + "\t\t\t" + this.linen + "\t" + this.columnn + "\t>";
+       return  String.format("%-30s %-30s %-5d %-5d",this.type, this.value ,this.linen , this.columnn);
+    
     }
 }

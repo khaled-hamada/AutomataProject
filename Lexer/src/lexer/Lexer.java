@@ -23,7 +23,7 @@ public class Lexer {
     put("func", "keyword");put("for", "keyword");put("float", "keyword");
     put("if", "keyword");put("int", "keyword");  put("null", "keyword");  put("return", "keyword");
     put("true", "keyword");  put("string", "keyword");put("char","keyword");put("elseif","keyword");
-    put("print","keyword"); put("printf","keyword");
+    put("print","keyword"); put("printf","keyword");put("main","keyword");
     // Dispatch operators
     put(".", "Dispatch operator");
 
@@ -75,6 +75,7 @@ public class Lexer {
     put("]", "Delimiter - RightBracket");
     put(")","Delimiter - RightParen");
     put(";","Delimiter - semiColon" );
+    put("?", "Delimiter - question if ");
     // Special token types
     put("EndOfInput", "EndOfInput");
     put("Unrecognized", "Unrecognized");
@@ -94,7 +95,7 @@ public class Lexer {
     private final ArrayList<Character> delimiter =  new ArrayList<Character>()
     {{
         add('('); add(')');add('[');add(']');add('{');add('}');add(',');
-        add(':');add(';');
+        add(':');add(';');add('?');
     }};
     // recognize single char operators 
    private final ArrayList<Character> operatorSC =  new ArrayList<Character>()
@@ -115,7 +116,7 @@ public class Lexer {
     {{
         add("double"); add("else");add("false");add("func");add("for");add("float");add("if");
         add("int");add("elseif");add("null");add("return");add("true");add("string");add("char");
-        add("print");add("printf");
+        add("print");add("printf");add("main");
     }};
    
    
@@ -162,11 +163,16 @@ public class Lexer {
     // ----------------------------------------------------------------
     // ----------------------------------------------------------------------
     private Token nextToken(){
-        char c ;
+        char c ,lastc = '\0' ;
         while(this.position < this.input.length()){
             // get next char in input 
             c = this.input.charAt(this.position);
            // System.out.println("char c = "+c);
+            //get out of infinte loops 
+            if(c == lastc)
+                 return new Token(this.tokenType.get("Error"),c+" "+lastc,this.line,this.column);
+            //update last c 
+            lastc = c;
             //check white spaces 
             if(Character.isWhitespace(c))
                 removeWhiteSpaces();
@@ -390,7 +396,7 @@ public class Lexer {
             return new Token(this.tokenType.get("String"),tokenVal,templ,tempcol);
         }
         else 
-            return new Token(this.tokenType.get("Error"),tokenVal,templ,tempcol);
+            return new Token(this.tokenType.get("Unrecognized"),tokenVal,templ,tempcol);
     }
     
     // ----------------------------------------------------------------------
@@ -418,10 +424,10 @@ public class Lexer {
                     }
                 }
                 else
-                     return new Token(this.tokenType.get("Error"),c+"",this.line,this.column);
+                     return new Token(this.tokenType.get("Unrecognized"),c+"",this.line,this.column);
             }
      
-        return new Token(this.tokenType.get("Error"),c+"",this.line,this.column);
+        return new Token(this.tokenType.get("Unrecognized"),c+"",this.line,this.column);
     }
     
     
@@ -446,14 +452,17 @@ public class Lexer {
     
     
     
+   
     // ----------------------------------------------------------------------
     //-----------------------------------------------------------------------
     public void printTokens(){
         if(this.allTokens != null){
             if(this.allTokens.size() >0 ){
-                System.out.println("Type\t\t\t\t\t\t" +"value\t\t\t" + "line#\t" + "column#\t");
+                System.out.printf("%-30s %-30s %-5s %-5s \n","type","value","line#","col#");
+                System.out.printf("-----------------------------------------------------------------------------------------------\n");
                 for(int i = 0 ; i<this.allTokens.size() ; i++){
                     System.out.println(this.allTokens.get(i).toString());
+                    System.out.printf("-------------------------------------------------------------------------------------------\n");
                 }
             }
             else 
