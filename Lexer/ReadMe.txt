@@ -12,8 +12,8 @@ This project is based on this great series of articles :
 1- https://hackernoon.com/lets-build-a-programming-language-2612349105c6
 2- https://hackernoon.com/compilers-and-interpreters-3e354a2e41cf
 3- https://hackernoon.com/lexical-analysis-861b8bfe4cb0
-in the serires the author is buliding a compiler for 
+In the serires the author is buliding a compiler for 
 a programming language called "Blink" using JavaScript 
 , but i edited the project and build it using "JAVA" and also edit 
 the programing language and build something like C programming language 
-But Not c itself     
+But Not c itself

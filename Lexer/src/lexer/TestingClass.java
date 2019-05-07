@@ -47,6 +47,7 @@ public class TestingClass {
     
     // convert code to tokens 
     System.out.println("read code ");
+    code = "= .0123456789";
     Lexer l  = new Lexer(code);
     List<Token> tokens = l.tokenize();
     l.printTokens();
@@ -55,8 +56,9 @@ public class TestingClass {
 //    String maxs = max+"";
 //     System.out.println(" \"khaled\" ");
 //    
-    double  x = 100;
-     x =100;    
+    double  x = .100;
+    x += -.1;
+    System.out.println(x);
     }
     
 }

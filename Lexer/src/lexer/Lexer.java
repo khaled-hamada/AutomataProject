@@ -25,7 +25,7 @@ public class Lexer {
     put("func", "keyword");put("for", "keyword");put("float", "keyword");
     put("if", "keyword");put("int", "keyword");  put("null", "keyword");  put("return", "keyword");
     put("true", "keyword");  put("string", "keyword");put("char","keyword");put("elseif","keyword");
-    put("print","keyword"); put("printf","keyword");put("main","keyword");
+    put("print","keyword"); put("printf","keyword");put("main","keyword");put("boolean","keyword");
     // Dispatch operators
     put(".", "Dispatch operator");
 
@@ -118,7 +118,7 @@ public class Lexer {
     {{
         add("double"); add("else");add("false");add("func");add("for");add("float");add("if");
         add("int");add("elseif");add("null");add("return");add("true");add("string");add("char");
-        add("print");add("printf");add("main");
+        add("print");add("printf");add("main");add("boolean");
     }};
    
    
@@ -212,9 +212,12 @@ public class Lexer {
                }
               
             }
+            // check numbers before single operators 
             // 2- check for single operator  define recognize number especailly negative 
             // and positive preceded by a + sign before it 
             //check prevsious token if its = then this in a number not an operator 
+            if(isStartOfNumber(c))
+                return recognizeNumber();
             if(this.operatorSC.contains(c)){
                    this.position += 1;
                    this.column += 1;
@@ -222,7 +225,7 @@ public class Lexer {
                                      this.column -1);
               }
              // recognize identifiers  and keywords 
-            if(Character.isLetterOrDigit(c) || c =='_')
+            if(Character.isAlphabetic(c) || c =='_')
                 return recognizeKW_ID();
              
             // recognize string varialbes 
@@ -233,20 +236,11 @@ public class Lexer {
                // System.out.println("Stuck here ");
                 return recognizeCharVar();
             }
-            
-//            else{
-//                System.out.println("Hey am here get a token ");
-//                this.column +=2; 
-//                this.position +=2; 
-//                return new Token("mm","mm",this.line,this.column);
-//                
-//            } 
-               
+              
         }
-        if(this.position >= this.input.length())
-            return new Token(this.tokenType.get("EndOfInput")," ",0,0);
-        
-        return new Token("mm","mm",this.line,this.column);
+       
+        // end of code file     
+        return new Token(this.tokenType.get("EndOfInput")," ",this.line,this.column);
     }
     
     
@@ -443,19 +437,37 @@ public class Lexer {
      * using FSM 
      */
     private Token recognizeNumber(){
-        return new Token(" ","",0,0);
+        
+        
+        
+        
+        
+        
+        
+        
+        this.position += 1;
+        return new Token("Number",this.input.charAt(this.position -1)+"",0,0);
     }
     
+    ////////////////////////////////////////////////
     // helper methods for recognize numbers 
+    //recognize the start state of our Number FSM 
     private boolean isStartOfNumber(char c){
         if(Character.isDigit(c))
             return true ; 
         //detect positvie / negative / decimal numbers 
         if(c == '.' || c =='+' || c =='-'){
-            // check previous token if its equal operator = then we are correct 
+            // check previous token if its an operator  then we are correct 
             //else return false 
             if(this.allTokens.size() >0){
-                 Token prev = this.allTokens.get(this.allTokens.size()-1);
+                 Token prev = this.allTokens.get(this.allTokens.size() - 1);
+                 String tokenVal = prev.getValue();
+                 if(tokenVal.length() <= 2 && (this.operatorDC.contains(tokenVal)
+                         || this.operatorSC.contains(tokenVal.charAt(0)))){
+                     
+                     return true ;
+                 }
+                     
                  
             }
             return true ; 
