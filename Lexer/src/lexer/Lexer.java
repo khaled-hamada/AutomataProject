@@ -22,7 +22,7 @@ public class Lexer {
     // Keywords
     
     put("double", "keyword");  put("else", "keyword");put("false", "keyword");
-    put("func", "keyword");put("for", "keyword");put("float", "keyword");
+    put("func", "keyword");put("for", "keyword");
     put("if", "keyword");put("int", "keyword");  put("null", "keyword");  put("return", "keyword");
     put("true", "keyword");  put("string", "keyword");put("char","keyword");put("elseif","keyword");
     put("print","keyword"); put("printf","keyword");put("main","keyword");put("boolean","keyword");
@@ -437,16 +437,10 @@ public class Lexer {
      * using FSM 
      */
     private Token recognizeNumber(){
+        NumberFSM fsm = new NumberFSM(this.input.substring(this.position), 
+                                        this.line, this.column);
         
-        
-        
-        
-        
-        
-        
-        
-        this.position += 1;
-        return new Token("Number",this.input.charAt(this.position -1)+"",0,0);
+       return fsm.runFSM() ;
     }
     
     ////////////////////////////////////////////////

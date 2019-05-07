@@ -1,3 +1,10 @@
+int a = 10;
+int b = -10 ;
+int c = +15 ;
+double d = 12.5;
+double e = -12.452 ; 
+double f = .6546e-5 ;
+
 func int main(int a, int b){
 if a > b
 	return a ;
