@@ -36,7 +36,7 @@ public class NumberFSM {
         while( pos < this.input.length()){
             c = this.input.charAt(pos);
             nextS = nextState(c);
-            System.out.println("Curr state is "+nextS+"  while input char is "+ c);
+           // System.out.println("Curr state is "+nextS+"  while input char is "+ c);
             if(nextS != -1){
                 this.curState = nextS ;
                 tokenVal += c;

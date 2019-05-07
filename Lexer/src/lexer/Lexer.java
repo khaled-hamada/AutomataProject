@@ -440,7 +440,12 @@ public class Lexer {
         NumberFSM fsm = new NumberFSM(this.input.substring(this.position), 
                                         this.line, this.column);
         
-       return fsm.runFSM() ;
+        Token token = fsm.runFSM() ; 
+        this.line = token.getLine() ; 
+        this.position += token.getValue().length();
+        this.column += token.getValue().length();
+       
+       return token ;
     }
     
     ////////////////////////////////////////////////

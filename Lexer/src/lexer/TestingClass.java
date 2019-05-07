@@ -47,7 +47,7 @@ public class TestingClass {
     
     // convert code to tokens 
     System.out.println("read code ");
-    code = "= .0123456789";
+   // code = "= .0123456789;";
     Lexer l  = new Lexer(code);
     List<Token> tokens = l.tokenize();
     l.printTokens();
