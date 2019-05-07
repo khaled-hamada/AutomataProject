@@ -8,6 +8,7 @@ package lexer;
 /**
  *
  * @author khaled osman
+ * @email khaledosman737@gmail.com
  */
 public class Token {
     private String type;

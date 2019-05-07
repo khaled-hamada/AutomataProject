@@ -9,6 +9,8 @@ import java.util.*;
 /**
  *
  * @author khaled osman
+ * @email khaledosman737@gmail.com
+ * 
  */
 public class Lexer {
     
@@ -128,36 +130,39 @@ public class Lexer {
         this.line = 0;
         this.position = 0;
         this.paren = new Stack<>();
+        this.allTokens = new ArrayList<>();
         
         
     }
     // ----------------------------------------------------------------------
     // ----------------------------------------------------------------------
     public List<Token> tokenize(){
-        List<Token> tokens = new ArrayList<>();
+        
         Token token = nextToken();
         
         while(! token.getType().equals( tokenType.get("EndOfInput"))){
             if(token.getType().equals( tokenType.get("Error")) ||
                    token.getType().equals( tokenType.get("Unrecognized")) ){
                 System.out.println(token.toString());
+                printErrorLine(token.getLine());
                 this.allTokens = null ;
-                return null ;
+                return this.allTokens ;
                 
             }
             
-            tokens.add(token);
+            this.allTokens.add(token);
             token = nextToken();
         }
         //check for parenthesis matching 
         if(this.paren.size() > 0){
             System.out.println("Unbalanced parenthesis due to these "+this.paren.toString());
+            printErrorLine(token.getLine());
             this.allTokens = null ;
-            return null ;
+            return this.allTokens  ;
         }
             
-        this.allTokens = tokens ;
-        return tokens ;
+       
+        return this.allTokens ;
     }
     
     // ----------------------------------------------------------------
@@ -443,7 +448,19 @@ public class Lexer {
     
     // helper methods for recognize numbers 
     private boolean isStartOfNumber(char c){
-        
+        if(Character.isDigit(c))
+            return true ; 
+        //detect positvie / negative / decimal numbers 
+        if(c == '.' || c =='+' || c =='-'){
+            // check previous token if its equal operator = then we are correct 
+            //else return false 
+            if(this.allTokens.size() >0){
+                 Token prev = this.allTokens.get(this.allTokens.size()-1);
+                 
+            }
+            return true ; 
+        }
+            
         return false ;
     }
     
@@ -469,6 +486,13 @@ public class Lexer {
                 System.out.println("There is no tokens in the input just white spaces ");
         }
        
+    }
+    // ----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
+    private void printErrorLine(int linen){
+       System.out.println("error occurs in line # "+linen +" in the code file"
+               + " which is : \n"+ this.input.split("\n")[linen]+"\n");
+        
     }
     
 }

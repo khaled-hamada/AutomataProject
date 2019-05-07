@@ -8,6 +8,7 @@ package lexer;
 /**
  *
  * @author khaled osman
+ * @email khaledosman737@gmail.com
  */
 import java.io.*;
 import java.util.List;
@@ -54,6 +55,8 @@ public class TestingClass {
 //    String maxs = max+"";
 //     System.out.println(" \"khaled\" ");
 //    
+    double  x = 100;
+     x =100;    
     }
     
 }
