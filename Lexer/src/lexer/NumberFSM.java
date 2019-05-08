@@ -46,7 +46,7 @@ public class NumberFSM {
                 //recognize a number 
                 if(this.finalStates.contains(this.curState))
                     // determine type of Number 
-                     return new Token("Number",tokenVal,0,0);
+                     return new Token("Number",tokenVal,this.line,this.column);
                 // uncorrect number foramtion break and return Error 
                 else 
                     break ;

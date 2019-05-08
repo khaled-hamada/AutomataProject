@@ -21,7 +21,7 @@ public class TestingClass {
     
     // read code file 
     String code = "";
-    BufferedReader br = new BufferedReader(new FileReader("testSample1.txt"));
+    BufferedReader br = new BufferedReader(new FileReader("testSample2.txt"));
     try {
         StringBuilder sb = new StringBuilder();
         String line = br.readLine();
@@ -47,18 +47,13 @@ public class TestingClass {
     
     // convert code to tokens 
     System.out.println("read code ");
-   // code = "= .0123456789;";
+   // code = " gfd\"\"\" ";
     Lexer l  = new Lexer(code);
     List<Token> tokens = l.tokenize();
+    
     l.printTokens();
     System.out.println("number of tokens = " +( tokens != null? tokens.size(): 0));
-//    char  max ='z';
-//    String maxs = max+"";
-//     System.out.println(" \"khaled\" ");
-//    
-    double  x = .100;
-    x += -.1;
-    System.out.println(x);
+    //System.out.println("\\\\\"");
     }
     
 }

@@ -127,7 +127,7 @@ public class Lexer {
     public Lexer(String input ){
         this.input = input ;
         this.column = 0;
-        this.line = 0;
+        this.line = 1;
         this.position = 0;
         this.paren = new Stack<>();
         this.allTokens = new ArrayList<>();
@@ -136,6 +136,10 @@ public class Lexer {
     }
     // ----------------------------------------------------------------------
     // ----------------------------------------------------------------------
+    /**
+     * convert input code to a series of tokens 
+     * @return list of type Tokens 
+     */
     public List<Token> tokenize(){
         
         Token token = nextToken();
@@ -371,6 +375,7 @@ public class Lexer {
      * 
      */
     private Token recognizeStringVar(){
+        
         String tokenVal = "";
         char c =this.input.charAt(this.position) ;
         // proceed position by one to skip first "   
@@ -469,7 +474,7 @@ public class Lexer {
                      
                  
             }
-            return true ; 
+           // return true ; 
         }
             
         return false ;
@@ -486,7 +491,7 @@ public class Lexer {
     public void printTokens(){
         if(this.allTokens != null){
             if(this.allTokens.size() >0 ){
-                System.out.printf("%-30s %-30s %-5s %-5s \n","type","value","line#","col#");
+                System.out.printf("%-30s %-30s %-6s %-6s \n","type","value","line#","col#");
                 System.out.printf("-----------------------------------------------------------------------------------------------\n");
                 for(int i = 0 ; i<this.allTokens.size() ; i++){
                     System.out.println(this.allTokens.get(i).toString());
@@ -502,7 +507,7 @@ public class Lexer {
     //-----------------------------------------------------------------------
     private void printErrorLine(int linen){
        System.out.println("error occurs in line # "+linen +" in the code file"
-               + " which is : \n"+ this.input.split("\n")[linen]+"\n");
+               + " which is : \n"+ this.input.split("\n")[linen-1]+"\n");
         
     }
     
