@@ -26,6 +26,7 @@ public class Lexer {
     put("if", "keyword");put("int", "keyword");  put("null", "keyword");  put("return", "keyword");
     put("true", "keyword");  put("string", "keyword");put("char","keyword");put("elseif","keyword");
     put("print","keyword"); put("printf","keyword");put("main","keyword");put("boolean","keyword");
+    put("import","keyword");put("from","keyword");put("as","keyword");
     // Dispatch operators
     put(".", "Dispatch operator");
 
@@ -118,7 +119,7 @@ public class Lexer {
     {{
         add("double"); add("else");add("false");add("func");add("for");add("float");add("if");
         add("int");add("elseif");add("null");add("return");add("true");add("string");add("char");
-        add("print");add("printf");add("main");add("boolean");
+        add("print");add("printf");add("main");add("boolean");add("import");add("from");add("as");
     }};
    
    
@@ -153,7 +154,7 @@ public class Lexer {
                 return this.allTokens ;
                 
             }
-            
+           // System.out.println(token.toString());
             this.allTokens.add(token);
             token = nextToken();
         }
@@ -192,7 +193,14 @@ public class Lexer {
                         this.input.charAt(this.position + 1) == '/'){
                     this.position += 2; 
                     this.column +=2;
-                    removeComments();
+                    c = '\0'; // dummy char to skip next ifs 
+                    removeComments(1); // remove first type 1 which is // 
+                }
+                else if((this.position + 1) <this.input.length() &&
+                        this.input.charAt(this.position + 1) == '*'){
+                    c = '\0'; // dummy char to skip next ifs 
+                    //System.out.println("detect seond type comment /* */ ");
+                    removeComments(2);// seconds type 2 which is /* [chars]* */
                 }
                 // make remove comments one ant two for /* */ 
             }
@@ -276,17 +284,52 @@ public class Lexer {
      * this function removes comments 
     */
    
-    private void  removeComments(){
-        while(this.position <this.input.length() && 
-                this.input.charAt(this.position) != '\n')
-        {
-            this.position += 1;  
-            
+    private void  removeComments(int type){
+        switch(type){
+            case 1:
+                    while(this.position <this.input.length() && 
+                            this.input.charAt(this.position) != '\n')
+                    {
+                        this.position += 1;  
+
+                    }
+                    //new line 
+                    this.line += 1;
+                    this.column = 0;
+                    this.position += 1;
+                    return ;
+            case 2 :
+                char c,lastc ;
+                //skip first start of the comment  
+               // System.out.println("pos = "+this.position);
+                this.position +=2 ;
+               // System.out.println("pos = "+this.position);
+                lastc = (this.position <this.input.length()) ? 
+                         this.input.charAt(this.position): '\0';
+                this.position ++ ;
+                //System.out.println("pos = "+this.position + " lastc = "+lastc);
+                c = (this.position <this.input.length()) ? 
+                         this.input.charAt(this.position): '\0';
+                this.position ++ ;
+                //System.out.println("pos = "+this.position+ " c = "+c );
+                while(  lastc !='*' || c !='/'){
+                    if(lastc == '\n'){
+                        this.line++;
+                        this.column = 0;
+                    }
+                    
+                    lastc = c ;
+                    c = (this.position <this.input.length()) ? 
+                         this.input.charAt(this.position): '\0';
+                    this.position ++ ;
+                    //System.out.println("pos = "+this.position+ " c = "+c);
+                }
+                if(lastc != '*' && c !='/'){
+                    // unterminated comment return error
+                    
+                }
         }
-        //new line 
-        this.line += 1;
-        this.column = 0;
-        this.position += 1;
+        
     }
     
     //------------------------------------------------------------------
@@ -382,15 +425,45 @@ public class Lexer {
         this.position +=1 ;
         int templ = this.line ;
         int tempcol = this.column+1;
-        while(this.position < this.input.length() && 
-               (c = this.input.charAt(this.position))!='\"' ){
-                tokenVal += c;
-                this.position +=1 ;
-                this.column += 1;
-                if(c == '\n'){
-                    this.line += 1;
-                    this.column = 0;
+        while(this.position < this.input.length() ){
+           // System.out.println("char value = "+c);
+            if( (c = this.input.charAt(this.position)) == '\"' )
+                break ;
+            else {
+                if(c == '\\'){ // check for ecape chars 
+                    c= this.input.charAt(this.position + 1 );
+                    if(isEscapeChar(c) ){
+                        tokenVal += c; // skip first backslach added by java 
+                        this.position +=2 ;
+                        this.column += 2;
+                    }
+                    
+                    //else if( c == 'n')
+                    else {
+                        tokenVal += "\\" + c; // skip first backslach added by java 
+                        this.position +=2 ;
+                        this.column += 2;
+                    }
+//                    else if(c == 't'){
+//                        tokenVal += '\t'; // skip first backslach added by java 
+//                        this.position +=2 ;
+//                        this.column += 2;
+//                    }
+                   
                 }
+                else {
+                        tokenVal += c;
+                        this.position +=1 ;
+                        this.column += 1;
+                }
+                        
+                    
+                if(c == '\n'){
+                        this.line += 1;
+                        this.column = 0;
+                }
+            }
+               
         }
         if(c == '\"'){
             // skip second " 
@@ -401,6 +474,13 @@ public class Lexer {
         }
         else 
             return new Token(this.tokenType.get("Unrecognized"),tokenVal,templ,tempcol);
+    }
+    
+    
+    // helper method for recognizg strings  
+    private boolean isEscapeChar(char c){
+        return (c == '\n' || c =='\t' || c =='\\' || c =='\"' || c== '\'' 
+                || c == '\b' || c == '\f' || c == '\r' );
     }
     
     // ----------------------------------------------------------------------

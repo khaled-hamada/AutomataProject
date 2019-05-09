@@ -97,12 +97,12 @@ describe("Lexer", () => {
         });
 
         it("should recognize a string containing escaped double quotes", () => {
-            //var lexer = new Lexer("a string containing an \" escaped double quote");
+            var lexer = new Lexer("a string containing an \" escaped double quote");
 
             var token = lexer.nextToken();
 
             assert.equal(token.type, TokenType.String);
-          //assert.equal(token.value, "a string containing an \" escaped double quote");
+            assert.equal(token.value, "a string containing an \" escaped double quote");
         });
 
         it("should recognize a string containing escape sequences", () => {
@@ -852,3 +852,13 @@ describe("Lexer", () => {
         });
     });
 });
+
+
+/* 
+*
+*
+*
+*
+*
+*/ 
+print("well done khaled \n\t\r\f\0\\\'\"\b ");
