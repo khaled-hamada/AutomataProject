@@ -16,4 +16,6 @@ In the serires the author is buliding a compiler for
 a programming language called "Blink" using JavaScript 
 , but i edited the project and build it using "JAVA" and also edit 
 the programing language and build something like C programming language 
-But Not c itself
+But Not c itself. 
+It is a comibations of C, Java, and python 
+
