@@ -20,8 +20,9 @@ public class TestingClass {
     // TODO code application logic here
 //    
 //    // read code file 
+    System.out.println("Reading code");
     String code = "";
-    BufferedReader br = new BufferedReader(new FileReader("testSample2.txt"));
+    BufferedReader br = new BufferedReader(new FileReader("testSample5.txt"));
     try {
         StringBuilder sb = new StringBuilder();
         String line = br.readLine();
@@ -46,7 +47,7 @@ public class TestingClass {
    
     
 //    // convert code to tokens 
-      System.out.println("read code ");
+      System.out.println("Done Reading code ");
    //   System.out.println(code);
 //   // code = " ";
 //    
@@ -55,21 +56,6 @@ public class TestingClass {
     
     l.printTokens();
     System.out.println("number of tokens = " +( tokens != null? tokens.size(): 0));
-   
-    
-    
-//    String rep ="";
-//    char c ;
-//    for(int i =0 ; i< code.length() ; i++){
-//        if((c = code.charAt(i)) == '\"')
-//            rep += "\\\"";
-//        else 
-//            rep += c ;
-//    }
-//    System.out.println(rep);
-      
-    
-    
     }
     
 }

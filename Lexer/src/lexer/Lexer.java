@@ -22,11 +22,11 @@ public class Lexer {
     // Keywords
     
     put("double", "keyword");  put("else", "keyword");put("false", "keyword");
-    put("func", "keyword");put("for", "keyword");
+    put("func", "keyword");put("for", "keyword");put("void", "keyword");
     put("if", "keyword");put("int", "keyword");  put("null", "keyword");  put("return", "keyword");
     put("true", "keyword");  put("string", "keyword");put("char","keyword");put("elseif","keyword");
     put("print","keyword"); put("printf","keyword");put("main","keyword");put("boolean","keyword");
-    put("import","keyword");put("from","keyword");put("as","keyword");
+    put("import","keyword");put("from","keyword");put("as","keyword");put("size","keyword");
     // Dispatch operators
     put(".", "Dispatch operator");
 
@@ -63,8 +63,10 @@ public class Lexer {
 
     // Identifier and Literals
     put("Identifier", "var - Identifier");
-    put("Integer", "var - Integer");
-    put("Decimal", "var - Decimal");
+    put("PInteger", "Number - Positive Integer");
+    put("NInteger", "Number - Negative Integer");
+    put("PFloat", "Number - Positive Double");
+    put("NFloat", "Number - Negative Double");
     put("String", "var - String");
     put("Char","var - Char");
     // Delimiters
@@ -120,6 +122,7 @@ public class Lexer {
         add("double"); add("else");add("false");add("func");add("for");add("float");add("if");
         add("int");add("elseif");add("null");add("return");add("true");add("string");add("char");
         add("print");add("printf");add("main");add("boolean");add("import");add("from");add("as");
+        add("size");add("void");
     }};
    
    
@@ -547,9 +550,10 @@ public class Lexer {
                  Token prev = this.allTokens.get(this.allTokens.size() - 1);
                  String tokenVal = prev.getValue();
                  if(tokenVal.length() <= 2 && (this.operatorDC.contains(tokenVal)
-                         || this.operatorSC.contains(tokenVal.charAt(0)))){
+                         || this.operatorSC.contains(tokenVal.charAt(0)) || 
+                         prev.getValue().equals(","))){
                      
-                     return true ;
+                        return true ;
                  }
                      
                  

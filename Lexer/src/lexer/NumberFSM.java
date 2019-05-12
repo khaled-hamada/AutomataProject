@@ -31,6 +31,7 @@ public class NumberFSM {
     }
     public Token  runFSM(){
         int pos = 0 , nextS;
+        boolean negFlag =false , floatFlag = false;
         char c ;
         String tokenVal = "";
         while( pos < this.input.length()){
@@ -44,9 +45,23 @@ public class NumberFSM {
             }
             else{
                 //recognize a number 
-                if(this.finalStates.contains(this.curState))
-                    // determine type of Number 
-                     return new Token("Number",tokenVal,this.line,this.column);
+                if(this.finalStates.contains(this.curState)){
+                    // determine Number type 
+                    if(tokenVal.startsWith("-")){
+                        negFlag = true;
+                    }
+                    if(tokenVal.contains(".")){
+                        floatFlag = true;
+                    }
+                    if(negFlag && floatFlag)
+                         return new Token("Number - Negative Double",tokenVal,this.line,this.column);
+                    else if(floatFlag)
+                        return new Token("Number - Positive Double",tokenVal,this.line,this.column);
+                    else if(negFlag)
+                        return new Token("Number - Negative Integer",tokenVal,this.line,this.column);
+                    else 
+                        return new Token("Number - Positive Integer",tokenVal,this.line,this.column);
+                }
                 // uncorrect number foramtion break and return Error 
                 else 
                     break ;

@@ -1,0 +1,17 @@
+/*
+* import functions from other modules 
+*/	
+
+from testSample3 import getMin as min 
+from testSample3 import getMax as max 
+	
+func int main(){
+
+		// get min number in  an array of integers 
+		int[] intArray = {1,7,9,10, 3,11,2,12,17,25, -1, -8};
+		int minNumber = min(intArray);
+		int maxNumber = max(intArray);
+		print("\n min number in the array is "+ minNumber); 
+		ptint("\n and maxmim number in the array is" +maxNumber); 
+		return 0 ;
+}

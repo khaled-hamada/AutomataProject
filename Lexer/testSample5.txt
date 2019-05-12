@@ -1,0 +1,14 @@
+/*
+* code with errors in 
+* 1- parenthesis 
+* 2- tokens formation 
+*/
+
+
+func void errors(){
+	double number = 452..5485e-5;
+	double number2 = 4522eE+10;
+	
+	string _chars = "No errors here";
+
+}}

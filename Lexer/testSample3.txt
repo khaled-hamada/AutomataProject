@@ -1,1 +1,22 @@
-print("well done khaled \n\t\r\f\0\\\'\"\b ");
+
+func int getMin(int[] arr){
+		int curmin = arr[0] ;
+		for(int i = 1 ; i < size(arr) ; i++){
+			if(arr[i] <curmin){
+				curmin = arr[i];
+			}
+		}
+		return curmin;
+
+}
+// return max number in an array of integers 
+func int getMax(int[] arr){
+		int curmin = arr[0] ;
+		for(int i = 1 ; i < size(arr) ; i++){
+			if(arr[i] <curmin){
+				curmin = arr[i];
+			}
+		}
+		return curmin;
+
+}
